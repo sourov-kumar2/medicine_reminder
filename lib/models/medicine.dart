@@ -1,33 +1,33 @@
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 
 part 'medicine.g.dart';
 
-@collection
-class Medicine {
-  Id id = Isar.autoIncrement;
-
+@HiveType(typeId: 0)
+class Medicine extends HiveObject {
+  @HiveField(0)
   late String name;
 
-  // Frequency: 'daily', 'alternate', 'custom'
-  late String frequency;
+  @HiveField(1)
+  late String frequency; // 'daily', 'alternate', 'custom'
 
-  // Times as list of "HH:mm" strings e.g. ["08:00", "14:00", "22:00"]
-  late List<String> times;
+  @HiveField(2)
+  late List<String> times; // ["08:00", "14:00", "22:00"]
 
-  // Duration type: 'date', 'forever', 'days'
-  late String durationType;
+  @HiveField(3)
+  late String durationType; // 'date', 'forever', 'days'
 
-  // Used when durationType == 'date'
+  @HiveField(4)
   DateTime? endDate;
 
-  // Used when durationType == 'days'
+  @HiveField(5)
   int? durationDays;
 
-  // Special instructions e.g. "খাওয়ার আগে"
+  @HiveField(6)
   String? instructions;
 
-  // When reminder started
+  @HiveField(7)
   late DateTime startDate;
 
+  @HiveField(8)
   bool isActive = true;
 }

@@ -3,8 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  awesome_notifications
-  isar_flutter_libs
+  flutter_timezone
   permission_handler_windows
 )
 
