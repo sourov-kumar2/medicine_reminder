@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'services/database_service.dart';
 import 'services/notification_service.dart';
-import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
+
+// ✅ MUST be top-level outside any class
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse response) async {
+  if (response.actionId == 'SNOOZE') {
+    await NotificationService.snoozeNotification(
+      response.id ?? 0,
+      '💊 ওষুধ খাওয়ার সময় হয়েছে!',
+      response.payload ?? '',
+    );
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,10 +48,7 @@ class _MedicineReminderAppState extends State<MedicineReminderApp> {
   }
 
   Future<void> _requestAllPermissions() async {
-    // Notification permission
     await NotificationService.requestPermission();
-
-    // Battery optimization bypass
     final status = await Permission.ignoreBatteryOptimizations.status;
     if (!status.isGranted) {
       await Permission.ignoreBatteryOptimizations.request();
@@ -52,7 +62,7 @@ class _MedicineReminderAppState extends State<MedicineReminderApp> {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
